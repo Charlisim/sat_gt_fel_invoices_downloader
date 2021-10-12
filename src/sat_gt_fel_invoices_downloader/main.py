@@ -61,7 +61,7 @@ class SatFelDownloader:
             dte_link = dtelink["href"]
             self._url_get_fel = dte_link
 
-    def get_invocies(self, date_start, date_end, received=True):
+    def get_invoices(self, date_start, date_end, received=True):
         self._session.get(self._url_get_fel)
         operation_param = "R" if received else "E"
         cookie = self._session.cookies.get("ACCESS_TOKEN")
@@ -102,6 +102,32 @@ class SatFelDownloader:
         print(r.headers)
         print(r.status_code)
         filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
+        if save_in_dir:
+            filename = os.path.join(save_in_dir, filename)
+            print(filename)
+        open(filename, "wb").write(r.content)
+
+    def get_xml(self, invoice, save_in_dir=None, received=True):
+        operation_param = "R" if received else "E"
+
+        dict_query = {
+            "usuario": self._credentials.username,
+            "tipoOperacion": operation_param,
+            "nitIdReceptor": "",
+        }
+        url = (
+            "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/xml?"
+            + urlencode(dict_query)
+        )
+
+        cookie = self._session.cookies.get("ACCESS_TOKEN")
+        header = {"authtoken": "token " + cookie}
+        r = self._session.post(url, headers=header, json=[invoice])
+        print(r.headers)
+        print(r.status_code)
+        filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
+        if not filename:
+            filename = invoice["numeroUuid"] + ".xml"
         if save_in_dir:
             filename = os.path.join(save_in_dir, filename)
             print(filename)
