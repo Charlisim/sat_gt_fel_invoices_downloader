@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="sat_gt_fel_invoices_downloader",
-    version="0.1.0",
+    version="0.1.1",
     author="Carlos Simon",
     author_email="dev@csimon.dev",
     description="Downloads PDFs and XMLs of invoices (received and emited) to later processing from Guatemalan SAT (Superintendencia de Administración Tributaria)",
@@ -17,7 +17,7 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Development Status :: 4 - Beta",
-        "License :: OSI Approved :: GNU License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         "Intended Audience :: Financial and Insurance Industry",
         "Intended Audience :: Information Technology",
