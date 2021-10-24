@@ -24,6 +24,6 @@ setuptools.setup(
         "Topic :: Office/Business :: Financial",
         "Topic :: Utilities",
     ],
-    python_requires=">=3.6",
-    install_requires=["requests", "beautifulsoup4"],
+    python_requires=">=3.7",
+    install_requires=["requests", "beautifulsoup4", "lxml"],
 )
