@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.2.1",
     author="Carlos Simon",
     author_email="dev@csimon.dev",
-    description="Downloads PDFs and XMLs of invoices (received and emited) to later processing from Guatemalan SAT (Superintendencia de Administración Tributaria)",
+    description="Downloads PDFs and XMLs of invoices (received and emited) for later processing from Guatemalan SAT (Superintendencia de Administración Tributaria)",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/gt-banks-parser/banks-parser-base",

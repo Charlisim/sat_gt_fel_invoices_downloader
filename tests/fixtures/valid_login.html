@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head id="j_idt2">
+    <link type="text/css" rel="stylesheet"
+        href="/menu-agenciaVirtual/javax.faces.resource/theme.css.jsf?ln=primefaces-aristo" />
+    <link type="text/css" rel="stylesheet"
+        href="/menu-agenciaVirtual/javax.faces.resource/theme.css.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=css" />
+    <link type="text/css" rel="stylesheet"
+        href="/menu-agenciaVirtual/javax.faces.resource/components.css.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=primefaces&amp;v=6.0" />
+    <script type="text/javascript"
+        src="/menu-agenciaVirtual/javax.faces.resource/jquery/jquery.js.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=primefaces&amp;v=6.0">
+        </script>
+    <script type="text/javascript"
+        src="/menu-agenciaVirtual/javax.faces.resource/jquery/jquery-plugins.js.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=primefaces&amp;v=6.0">
+        </script>
+    <script type="text/javascript"
+        src="/menu-agenciaVirtual/javax.faces.resource/core.js.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=primefaces&amp;v=6.0">
+        </script>
+    <script type="text/javascript"
+        src="/menu-agenciaVirtual/javax.faces.resource/components.js.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=primefaces&amp;v=6.0">
+        </script>
+    <script type="text/javascript">
+        if (window.PrimeFaces) { PrimeFaces.settings.locale = 'es'; }
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="theme-color" content="#1369A0" />
+</head>
+
+<body>
+    <script language="javascript">
+        document.oncontextmenu = function () {
+            return false;
+        };
+        document.ondragstart = function () {
+            return false;
+        };
+    </script>
+    <form id="initForm" name="initForm" method="post" action="https://farm3.sat.gob.gt/menu/init.do">
+        <input name="operacion" value="CANCELAR" type="hidden" />
+    </form>
+    <form id="formContent" name="formContent" method="post"
+        action="/menu-agenciaVirtual/private/home.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1"
+        enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="formContent" value="formContent" />
+
+        <script language="javascript">
+            if (top.frames.length > 0) {
+                window.open("home.jsf", "_blank");
+                window.stop();
+            }
+            function mostrarMenuLateral() {
+                var content = document.getElementById("formContent:contentAgenciaVirtual");
+                if (content.getAttribute("class").includes(" menuLateralVisible")) {
+                    content.setAttribute("class", content.getAttribute("class").replace(" menuLateralVisible", ""));
+                } else {
+                    content.setAttribute("class", content.getAttribute("class") + " menuLateralVisible");
+                }
+            }
+        </script>
+        <table id="formContent:j_idt8" class="ui-panelgrid ui-widget headerAgenciaVirtual ui-noborder" role="grid">
+            <tbody>
+                <tr class="ui-widget-content" role="row">
+                    <td role="gridcell" class="ui-panelgrid-cell"><a id="formContent:j_idt10" href="#"
+                            class="ui-commandlink ui-widget"
+                            onclick="window.location.reload();PrimeFaces.ab({s:&quot;formContent:j_idt10&quot;});return false;"><img
+                                id="formContent:j_idt11"
+                                src="/menu-agenciaVirtual/javax.faces.resource/logoSAT.PNG.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                alt="" width="125" title="Agencia Virtual" /></a>
+                    </td>
+                    <td role="gridcell" class="ui-panelgrid-cell"><a id="formContent:j_idt13" href="#"
+                            class="ui-commandlink ui-widget"
+                            onclick="mostrarMenuLateral();PrimeFaces.ab({s:&quot;formContent:j_idt13&quot;});return false;"><img
+                                id="formContent:j_idt14"
+                                src="/menu-agenciaVirtual/javax.faces.resource/ic_reorder_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                alt="" title="Menú" /></a><label id="formContent:j_idt15"
+                            class="ui-outputlabel ui-widget">Agencia Virtual</label>
+                    </td>
+                    <td role="gridcell" class="ui-panelgrid-cell">
+                        <label id="formContent:j_idt17" class="ui-outputlabel ui-widget">Agencia Virtual</label>
+                        <br /><label id="formContent:j_idt19" class="ui-outputlabel ui-widget">111111111</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br /><br /><br /><br />
+        <table id="formContent:contentAgenciaVirtual" class="ui-panelgrid ui-widget contentAgenciaVirtual ui-noborder"
+            role="grid">
+            <tbody>
+                <tr class="ui-widget-content" role="row">
+                    <td role="gridcell" class="ui-panelgrid-cell">
+                        <!--Men&uacute; Principal-->
+                        <div>
+                            <!--Adm&oacute;n. de Cuenta|| comentado para que no aparezca la opci&oacute;n, al agregarla colocarle el action opc 2--><a
+                                id="formContent:j_idt23" href="#" class="ui-commandlink ui-widget "
+                                onclick="PrimeFaces.ab({s:&quot;formContent:j_idt23&quot;,u:&quot;formContent:contentAgenciaVirtual&quot;});return false;">
+                                <div>
+                                    <img src="../resources/images/admin.jpg" width="24" height="24" /><label
+                                        id="formContent:j_idt25" class="ui-outputlabel ui-widget"
+                                        style="font-weight: bold">Admón. de Cuenta</label>
+                                </div>
+                            </a>
+                            <!--Servicios--><a id="formContent:j_idt28" href="#" class="ui-commandlink ui-widget "
+                                onclick="PrimeFaces.ab({s:&quot;formContent:j_idt28&quot;,u:&quot;formContent:contentAgenciaVirtual&quot;});return false;">
+                                <div>
+                                    <img id="formContent:j_idt30"
+                                        src="/menu-agenciaVirtual/javax.faces.resource/ic_description_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                        alt="" /><label id="formContent:j_idt31" class="ui-outputlabel ui-widget"
+                                        style="font-weight: bold">Servicios</label>
+                                </div>
+                            </a>
+                            <!--Consultas--><a id="formContent:j_idt34" href="#" class="ui-commandlink ui-widget "
+                                onclick="PrimeFaces.ab({s:&quot;formContent:j_idt34&quot;,u:&quot;formContent:contentAgenciaVirtual&quot;});return false;">
+                                <div>
+                                    <img id="formContent:j_idt36"
+                                        src="/menu-agenciaVirtual/javax.faces.resource/ic_find_in_page_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                        alt="" /><label id="formContent:j_idt37" class="ui-outputlabel ui-widget"
+                                        style="font-weight: bold">Consultas</label>
+                                </div>
+                            </a>
+                            <!--Aplicaciones--><a id="formContent:j_idt40" href="#" class="ui-commandlink ui-widget "
+                                onclick="window.open('https://farm3.sat.gob.gt/menu/login.jsp');PrimeFaces.ab({s:&quot;formContent:j_idt40&quot;,u:&quot;formContent:contentAgenciaVirtual&quot;});return false;">
+                                <div>
+                                    <img id="formContent:j_idt42"
+                                        src="/menu-agenciaVirtual/javax.faces.resource/ic_list_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                        alt="" /><label id="formContent:j_idt43" class="ui-outputlabel ui-widget"
+                                        style="font-weight: bold">Aplicaciones</label>
+                                </div>
+                            </a>
+                            <!--Salir--><a id="formContent:j_idt46" href="#" class="ui-commandlink ui-widget"
+                                onclick="document.getElementById('initForm').submit();;PrimeFaces.ab({s:&quot;formContent:j_idt46&quot;,u:&quot;formContent:contentAgenciaVirtual&quot;});return false;">
+                                <div>
+                                    <img id="formContent:j_idt48"
+                                        src="/menu-agenciaVirtual/javax.faces.resource/ic_power_settings_new_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                                        alt="" /><label id="formContent:j_idt49" class="ui-outputlabel ui-widget"
+                                        style="font-weight: bold">Salir</label>
+                                </div>
+                            </a>
+
+                        </div>
+                    </td>
+                    <td role="gridcell" class="ui-panelgrid-cell">
+                        <center>
+
+                            <!--Portada-->
+                            <!--Portada-->
+                            <table id="formContent:j_idt103" class="ui-panelgrid ui-widget" role="grid">
+                                <tbody>
+                                    <br /><br />
+                                    <div style="vertical-align: top; word-break: break-all !important">
+                                        <td role="gridcell" class="ui-panelgrid-cell oculto">
+                                            <img src="../resources/images/portada.JPG" width="150" height="300"
+                                                class="oculto" />
+                                        </td>
+                                        <td role="gridcell" class="ui-panelgrid-cell">
+                                            <label id="formContent:j_idt109" class="ui-outputlabel ui-widget"
+                                                style="font-size: 20px !important; color: #1369A0 !important; font-weight: bold">¡Hola!
+                                                Usuario de Prueba</label>
+
+                                            <br /><br />
+                                            <div style="width: 90% !important; text-align: justify">
+                                                <label id="formContent:j_idt111" class="ui-outputlabel ui-widget"
+                                                    style="font-size: 14px !important; color: #1369A0 !important;">En
+                                                    SAT valoramos tu tiempo. La Agencia Virtual es una herramienta
+                                                    electrónica que te ayuda a facilitar la ejecución de gestiones y
+                                                    consultas desde cualquier dispositivo con acceso a internet durante
+                                                    las 24 horas del día.</label>
+                                            </div>
+
+                                            <br /><label id="formContent:j_idt113" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">Qué
+                                                encuentras aquí:</label>
+                                            <br /><br /><label id="formContent:j_idt115"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">En
+                                            </label><label id="formContent:j_idt116" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Administración
+                                                de la cuenta, </label><label id="formContent:j_idt117"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">puedes
+                                                realizar cambio de contraseña, asignación/eliminación de roles y
+                                                otros.</label>
+                                            <br /><label id="formContent:j_idt119" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">En la
+                                                opción </label><label id="formContent:j_idt120"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Servicios,
+                                            </label><label id="formContent:j_idt121" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">puedes
+                                                realizar gestiones y actualizar información. </label>
+                                            <br /><label id="formContent:j_idt123" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">En la
+                                                opción </label><label id="formContent:j_idt124"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Consultas,
+                                            </label><label id="formContent:j_idt125" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">puedes
+                                                verificar la información registrada ante la SAT, así como el historial
+                                                de gestiones realizadas. </label>
+                                            <br /><label id="formContent:j_idt127" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">En
+                                            </label><label id="formContent:j_idt128" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Aplicaciones,
+                                            </label><label id="formContent:j_idt129" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">puedes
+                                                ubicar las demás herramientas electronicas que SAT te permite utilizar y
+                                                las opciones de E-Servicios. </label>
+                                            <br /><br /><br /><label id="formContent:j_idt131"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">En el
+                                                botón </label><label id="formContent:j_idt132"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">"Más"
+                                            </label><label id="formContent:j_idt133" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">encontrarás:</label>
+                                            <br /><br /><br /><label id="formContent:j_idt135"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Bitácora
+                                                de acceso, </label><label id="formContent:j_idt136"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">encontrarás
+                                                un histórico de todas las transacciones realizadas y consultadas dentro
+                                                de Agencia Virtual.</label>
+                                            <br /><label id="formContent:j_idt138" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Declaraguate,
+                                            </label><label id="formContent:j_idt139" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">te lleva
+                                                a la página que contiene el listado de formularios para realizar tu
+                                                gestión.</label>
+                                            <br /><label id="formContent:j_idt141" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important; font-weight: bold">Calendario
+                                                Triburario, </label><label id="formContent:j_idt142"
+                                                class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">al
+                                                seleccionarla puedes verificar los impuestos a pagar.</label><label
+                                                id="formContent:j_idt143" class="ui-outputlabel ui-widget"
+                                                style="font-size: 14px !important; color: #1369A0 !important;">Las
+                                                opciones que te aparecen están personalizadas de acuerdo a tu perfil
+                                                tributario y a los impuestos que estas afiliado.</label>
+                                            <br /><br /><br />
+                                            <div style="width: 90% !important; text-align: center">
+                                                <label id="formContent:j_idt145" class="ui-outputlabel ui-widget"
+                                                    style="font-size: 20px !important; color: #1369A0 !important; font-weight: bold">¡Gracias
+                                                    por visitarnos!</label>
+                                            </div>
+                                        </td>
+                                    </div>
+                                    <br />
+                                </tbody>
+                            </table>
+                            <!--Men&uacute; Administraci&oacute;n de cuenta-->
+                            <!--Men&uacute; Servicios-->
+                            <!--Men&uacute; Consultas-->
+                            <!--Men&uacute; Aplicaciones-->
+                        </center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <!--Men&uacute; Flotante-->
+        <div class="botonFlotante">
+            <ul>
+                <!--Calendario Tributario-->
+                <li><a id="formContent:j_idt507" href="#" class="ui-commandlink ui-widget"
+                        onclick="window.open('https://farm2.sat.gob.gt/japSitio-web/consultas/paadServicios/calendarioSatEnLinea.jsf', '_blank');PrimeFaces.ab({s:&quot;formContent:j_idt507&quot;});return false;">
+                        <span>Calendario Tributario</span><img id="formContent:j_idt509"
+                            src="/menu-agenciaVirtual/javax.faces.resource/ic_date_range_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                            alt="" /></a>
+                </li>
+                <!--Declaraguate-->
+                <li><a id="formContent:j_idt511" href="#" class="ui-commandlink ui-widget"
+                        onclick="window.open('https://declaraguate.sat.gob.gt/declaraguate-web/', '_blank');PrimeFaces.ab({s:&quot;formContent:j_idt511&quot;});return false;">
+                        <span
+                            style="padding-left: 2.3em !important; padding-right: 2.3em !important">Declaraguate</span>
+                        <img src="../resources/images/declaraguate.jpg" width="24" height="24" /></a>
+                </li>
+                <!--Bit&aacute;cora de accesos-->
+                <li><a id="formContent:j_idt514" href="#" class="ui-commandlink ui-widget"
+                        onclick="window.open('https://farm3.sat.gob.gt/jpa-eservicios/consultas/consultaHistoricoTransacciones.jsf?d4ft4NZ3ODo_=Mmt7yd4mMIHWxTXR1LVEPA__&amp;s1ttoX6P/2/VJws5IOfWJdpwVkT&gt;Wv9M=Mmt7yd4mMIHWxTXR1LVEPA__&amp;955Y3OhseHo_=JAxmvd5eLTAI5llu0QfP&gt;A__&amp;40lqlp&gt;PJfg_=vbItd24/0N8_&amp;gKhRMQIOQng_=NSKikTbbAMTjbdM4XPvDCa6lUIRHwNPAVQPFiOYZnVg_', '_blank');PrimeFaces.ab({s:&quot;formContent:j_idt514&quot;});return false;">
+                        <span>Bitácora de accesos</span><img id="formContent:j_idt516"
+                            src="/menu-agenciaVirtual/javax.faces.resource/ic_list_white_24dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                            alt="" /></a>
+                </li>
+            </ul>
+            <div>
+                <img id="formContent:j_idt518"
+                    src="/menu-agenciaVirtual/javax.faces.resource/ic_add_white_36dp.png.jsf;jsessionid=8DB43B5A2007769488860BE448F1B1F1?ln=images"
+                    alt="" />
+            </div>
+        </div>
+        <style type="text/css">
+            @media screen and (max-width: 600px) {
+                .oculto {
+                    display: none !important;
+                }
+            }
+        </style><input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0"
+            value="-8827915540669442830:-5002854503488642888" autocomplete="off" />
+    </form>
+    <script language="javascript">
+        function mostrarModal(id) {
+            var element = document.getElementById(id);
+            element.setAttribute("class", "ui-dlg-visible");
+
+            var childs = element.childNodes[1].childNodes;
+            childs[1].style.maxWidth = element.style.maxWidth;
+            childs[3].style.maxWidth = element.style.maxWidth;
+        }
+        function ocultarModal(id) {
+            document.getElementById(id).setAttribute("class", "ui-dlg-hidden");
+        }
+        PrimeFaces.locales['es'] = {
+            closeText: 'Cerrar',
+            prevText: 'Anterior',
+            nextText: 'Siguiente',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+            dayNamesMin: ['D', 'L', 'M', 'Mi', 'J', 'V', 'S'],
+            weekHeader: 'Semana',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Sólo hora',
+            timeText: 'Tiempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            currentText: 'Fecha actual',
+            ampm: false,
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día',
+            allDayText: 'Todo el día'
+        };
+    </script>
+</body>
+
+</html>
