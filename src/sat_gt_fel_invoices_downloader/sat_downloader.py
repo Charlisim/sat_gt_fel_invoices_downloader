@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup, CData
 from urllib.parse import urlencode
 from .actions import SATDoLogin, SATGetMenu
 from .main import SatFelDownloader
+from .models import SatCredentials
 
 
 class SATDownloader:

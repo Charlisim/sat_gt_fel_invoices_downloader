@@ -9,12 +9,6 @@ from .models import *
 from datetime import datetime
 
 
-class SatCredentials:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
-
 class SatFelDownloader:
     def __init__(self, credentials, url_get_fel, request_session=requests.Session()):
         self._credentials = credentials
