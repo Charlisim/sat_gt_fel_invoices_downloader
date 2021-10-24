@@ -236,7 +236,6 @@ class SatFelDownloader:
             .set_fel_invoice_serie(fel_invoice_serie)
             .build()
         )
-        logging.info(invoice)
         return invoice
 
     def _get_xml_response(self, invoice, received=True):
