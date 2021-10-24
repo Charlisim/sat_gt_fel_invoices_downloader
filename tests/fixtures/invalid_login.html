@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+
+<head>
+    <meta http-equiv="Context-Type" content="text/html; charset=ISO-8859-1" />
+    <link href="css/sat.css" rel="stylesheet" media="screen" />
+    <script type="text/javascript" language="JavaScript1.2">
+        var message = "Boton derecho deshabilitado.";
+        function clickIE() { if (document.all) { alert(message); return false; } }
+        function clickNS(e) {
+            if
+                (document.layers || (document.getElementById && !document.all)) {
+                if (e.which == 2 || e.which == 3) { alert(message); return false; }
+            }
+        }
+        if (document.layers) { document.captureEvents(Event.MOUSEDOWN); document.onmousedown = clickNS; }
+        else { document.onmouseup = clickNS; document.oncontextmenu = clickIE; }
+        document.oncontextmenu = new Function("return false");
+
+        //-----------------------------------
+        function maxWin() {
+            if (window.screen) {
+                var aw = screen.availWidth;
+                var ah = screen.availHeight;
+                var posx = 0;
+                var posy = 0;
+                window.moveTo(posx, posy);
+                window.resizeTo(aw, ah);
+            }
+        }
+        //-----------------------------------
+
+        function abrir(url) {
+            var win = window.open(url, "", "status,scrollbars=yes,toolbar=no");
+        }
+
+        function focoLogin() {
+            var login = document.getElementsByName('login');
+            if (login.length > 0) {
+                login[0].focus();
+            }
+        }
+    </script>
+    <title>Superintendencia de Administración Tributaria - SAT, GUATEMALA - v3.0.07072011 </title>
+</head>
+
+<body onload="maxWin();focoLogin();history.go(1)" onunload="history.go(1);">
+
+
+
+
+
+    <div id="container">
+        <div id="header-sat" class="ui-header-sat">
+            <div id="header_izquierda" class="ui-header-sat-izquierda">
+                <!--img src="img/Logo_SAT.png"-->
+            </div>
+            <div id="header_derecha" class="ui-header-sat-derecha">
+                <!--img src="img/Agencia_Virtual.png"-->
+            </div>
+        </div>
+        <table cellspacing="0" cellpadding="2" border="0" class="table_center">
+            <tr>
+                <td width="40%">
+                    <div id="texto">
+                        <p align="left">
+                            Recuerda tu contrase&ntilde;a es confidencial, no la compartas con nadie.
+                        </p>
+                        <p align="left">
+                            Las distintas aplicaciones guardan bit&aacute;coras de operaciones con informaci&oacute;n de
+                            su usuario.
+                        </p>
+                    </div>
+                </td>
+                <td width="60%" class="ui-sat-td">
+                    <form name="initForm" method="post" action="/menu/init.do">
+                        <input type="hidden" name="operacion" value="">
+
+                        <div class="formulario">
+                            <fieldset>
+                                <table cellspacing="0" cellpadding="2" border="0" class="form">
+
+
+                                    <tr>
+                                        <td width="15%">
+                                        </td>
+                                        <td width="30%">
+                                            <div class="etiqueta">
+                                                <label class="etiqueta">Usuario</label>
+                                                <label class="etiqueta">CUI-NIT</label>
+                                            </div>
+                                        </td>
+                                        <td width="40%">
+                                            <span class="control">
+                                                <input type="text" name="login" maxlength="13" size="15" value="">
+                                            </span>
+                                        </td>
+                                        <td width="15%">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="15%">
+                                        </td>
+                                        <td width="30%">
+                                            <div class="etiqueta">
+                                                <label class="etiqueta">Contraseña</label>
+                                            </div>
+                                        </td>
+                                        <td width="40%">
+                                            <span class="control">
+                                                <input type="password" name="password" maxlength="80" size="15"
+                                                    value="">
+                                            </span>
+                                        </td>
+                                        <td width="15%">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="15%">
+                                        </td>
+                                        <td width="30%">
+                                            <div class="etiqueta">
+                                                Colaborador
+                                            </div>
+                                        </td>
+                                        <td width="40%" align="left">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td width="50%">
+                                                        <span>
+                                                            <input type="checkbox" name="colaborador" value="on"
+                                                                class="form-check">
+                                                        </span>
+                                                    </td>
+                                                    <td width="50%">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="15%">
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </fieldset>
+                        </div>
+
+                        <div align="center" class="area_botones">
+
+                            <input type="submit" tabindex="1" class="boton_app" value="Aceptar"
+                                onclick="javascript:document.forms[0].elements[0].value='ACEPTAR'" align="middle" />
+
+
+                            <input type="submit" tabindex="2" class="boton_app" value="Cancelar"
+                                onclick="javascript:document.forms[0].elements[0].value='CANCELAR'" />
+
+
+                        </div>
+                    </form>
+
+                    <!-- MENSAJE DE ADVERTENCIA AL NO PODER CERRAR SESION EN NUBE -->
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+
+                    <div>
+                        <!--div id="container"-->
+
+
+                        <p class="error">
+                            <img src="img/Icono_error.png" alt="(!)" width="16" height="16" />
+                            <!--Se despliega el error que contiene la lista -->
+                            <strong> ERROR: </strong>Credenciales inválidas.
+                        </p>
+
+                        <!--/div-->
+                    </div>
+
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
