@@ -88,7 +88,20 @@ class SatFelDownloader:
         json_response = r.json()["detalle"]["data"]
         return json_response
 
-    def get_pdf(self, invoice, save_in_dir=None, received=True):
+    def _get_response(self, invoice, filetype, received=True):
+        url = None
+        if filetype.lower() == "xml":
+            url = (
+                "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/xml?"
+            )
+
+        elif filetype.lower() == "pdf":
+            url = (
+                "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/pdf?"
+            )
+
+        if url is None:
+            return None
         operation_param = "R" if received else "E"
 
         dict_query = {
@@ -96,14 +109,17 @@ class SatFelDownloader:
             "tipoOperacion": operation_param,
             "nitIdReceptor": "",
         }
-        url = (
-            "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/pdf?"
-            + urlencode(dict_query)
-        )
-
+        url += urlencode(dict_query)
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         header = {"authtoken": "token " + cookie}
         r = self._session.post(url, headers=header, json=[invoice])
+        return r
+
+    def get_pdf_content(self, invoice, received=True):
+        return self._get_response(invoice, filetype="pdf", received=received).content
+
+    def get_pdf(self, invoice, save_in_dir=None, received=True):
+        r = self._get_response(invoice, filetype="pdf", received=received)
         filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
         if save_in_dir:
             filename = os.path.join(save_in_dir, filename)
@@ -139,7 +155,7 @@ class SatFelDownloader:
         return model_lines
 
     def get_invoice_model(self, invoice, received=True):
-        xml_content = self._get_xml_content(invoice, received)
+        xml_content = self.get_xml_content(invoice, received)
         bs = BeautifulSoup(xml_content, "xml")
         emission_data = bs.find("DatosEmision")
         general_data = emission_data.select("DatosGenerales")[0]
@@ -238,29 +254,13 @@ class SatFelDownloader:
         )
         return invoice
 
-    def _get_xml_response(self, invoice, received=True):
-        operation_param = "R" if received else "E"
-
-        dict_query = {
-            "usuario": self._credentials.username,
-            "tipoOperacion": operation_param,
-            "nitIdReceptor": "",
-        }
-        url = (
-            "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/xml?"
-            + urlencode(dict_query)
-        )
-
-        cookie = self._session.cookies.get("ACCESS_TOKEN")
-        header = {"authtoken": "token " + cookie}
-        r = self._session.post(url, headers=header, json=[invoice])
-        return r
-
-    def _get_xml_content(self, invoice, received=True):
-        return self._get_xml_response(invoice=invoice, received=received).content
+    def get_xml_content(self, invoice, received=True):
+        return self._get_response(
+            invoice=invoice, filetype="xml", received=received
+        ).content
 
     def get_xml(self, invoice, save_in_dir=None, received=True):
-        r = self._get_xml_response(invoice, received)
+        r = self._get_response(invoice=invoice, filetype="xml", received=received)
         filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
         if not filename:
             filename = invoice["numeroUuid"] + ".xml"
@@ -324,6 +324,14 @@ class SATDownloader:
         invoices_model = list(map(downloader.get_invoice_model, invoices))
         return invoices_model
 
+    def get_pdf_content(self, invoice, save_in_dir=None):
+        if not self.its_initialized:
+            self.initialize()
+        downloader = SatFelDownloader(
+            self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
+        )
+        downloader.get_pdf_content(invoice, save_in_dir)
+
     def get_pdf(self, invoice, save_in_dir=None):
         if not self.its_initialized:
             self.initialize()
@@ -331,6 +339,14 @@ class SATDownloader:
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
         downloader.get_pdf(invoice, save_in_dir)
+
+    def get_xml_content(self, invoice):
+        if not self.its_initialized:
+            self.initialize()
+        downloader = SatFelDownloader(
+            self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
+        )
+        downloader.get_xml_content(invoice)
 
     def get_xml(self, invoice):
         if not self.its_initialized:
