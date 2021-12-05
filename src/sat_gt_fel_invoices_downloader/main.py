@@ -17,6 +17,10 @@ from .models import (
 )
 from .actions import SATDoLogin, SATGetMenu
 
+"""
+Private class that makes all the action
+"""
+
 
 class SatFelDownloader:
     def __init__(self, credentials, url_get_fel, request_session=requests.Session()):
@@ -284,6 +288,11 @@ class SatFelDownloader:
         return fname[0].replace('"', "")
 
 
+"""
+Main entrance of the SAT Downloader.
+"""
+
+
 class SATDownloader:
     def __init__(self, request_session=requests.Session()):
         self.credentials = None
@@ -291,11 +300,17 @@ class SATDownloader:
         self.url_get_fel = None
         self.its_initialized = False
 
+    "Need to set credentials before use any of the methods"
+
     def setCredentials(self, credentials):
         self.credentials = credentials
         return self
 
     def initialize(self):
+        if self.credentials is None:
+            raise ValueError(
+                "You didn't provided credentials. Please use setCredentials method"
+            )
         did_login, view_state = SATDoLogin(self.credentials, self.session).execute()
         if not did_login or not view_state:
             raise ValueError("The credentials you provided are not valid")
@@ -306,23 +321,31 @@ class SATDownloader:
             raise ValueError("Could not get the menu")
         self.its_initialized = True
 
-    def get_invoices(self, date_start, date_end):
+    def get_invoices(self, date_start, date_end, received=True):
         if not self.its_initialized:
             self.initialize()
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        return downloader.get_invoices_headers(date_start, date_end)
+        return downloader.get_invoices_headers(date_start, date_end, received)
 
-    def get_invoices_models(self, date_start, date_end):
+    def get_invoices_models(self, date_start, date_end, received=True):
         if not self.its_initialized:
             self.initialize()
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        invoices = self.get_invoices(date_start, date_end)
+        invoices = self.get_invoices(date_start, date_end, received)
         invoices_model = list(map(downloader.get_invoice_model, invoices))
         return invoices_model
+
+    def get_model(self, invoice):
+        if not self.its_initialized:
+            self.initialize()
+        downloader = SatFelDownloader(
+            self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
+        )
+        return downloader.get_invoice_model(invoice)
 
     def get_pdf_content(self, invoice, save_in_dir=None):
         if not self.its_initialized:
@@ -348,10 +371,10 @@ class SATDownloader:
         )
         downloader.get_xml_content(invoice)
 
-    def get_xml(self, invoice):
+    def get_xml(self, invoice, save_in_dir=None):
         if not self.its_initialized:
             self.initialize()
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        downloader.get_xml(invoice)
+        downloader.get_xml(invoice, save_in_dir)
