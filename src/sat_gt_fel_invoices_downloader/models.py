@@ -1,13 +1,34 @@
-from datetime import datetime
+from datetime import date, datetime
+from enum import Enum
 from re import S
 from dataclasses import dataclass
 from typing import List
+
+
+class EstadoDTE(Enum):
+    TODOS = ""
+    VIGENTES = "V"
+    ANULADAS = "I"
+
+
+class TypeFEL(Enum):
+    RECIBIDA = "R"
+    EMITIDA = "E"
 
 
 @dataclass
 class SatCredentials:
     username: str
     password: str
+
+
+@dataclass
+class SATFELFilters:
+    establecimiento: int
+    estadoDte: EstadoDTE
+    fechaInicio: date
+    fechaFin: date
+    tipo: TypeFEL
 
 
 @dataclass

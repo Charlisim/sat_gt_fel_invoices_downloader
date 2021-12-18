@@ -6,16 +6,20 @@ from bs4 import BeautifulSoup, CData
 from urllib.parse import urlencode
 from datetime import datetime
 from .models import (
+    EstadoDTE,
     Invoice,
     InvoiceLine,
     InvoiceTotals,
+    SATFELFilters,
     TotalTax,
     Address,
     ContactModel,
     InvoiceHeaders,
     IssuingModel,
+    TypeFEL,
 )
-from .actions import SATDoLogin, SATGetMenu
+from .actions import SATDoLogin, SATDoLogout, SATGetMenu, SATGetStablisments
+from contextlib import contextmanager
 
 """
 Private class that makes all the action
@@ -38,51 +42,29 @@ class SatFelDownloader:
         r = self._session.post("https://farm3.sat.gob.gt/menu/init.do", data=login_dict)
         r.raise_for_status()
         bs = BeautifulSoup(r.text, features="html.parser")
+        logging.info("Did login")
         view_state = bs.find("input", {"name": "javax.faces.ViewState"})
         if view_state and "value" in view_state:
             self._view_state = view_state["value"]
+            logging.info("Did get view state")
             return True
         return False
 
-    def _get_queries_menu(self):
-        form_data = {
-            "javax.faces.partial.ajax": True,
-            "javax.faces.source: formContent": "j_idt34",
-            "javax.faces.partial.execute": "@all",
-            "javax.faces.partial.render": "formContent:contentAgenciaVirtual",
-            "formContent:j_idt34": "formContent:j_idt34",
-            "formContent": "formContent",
-            "javax.faces.ViewState": self._view_state,
-        }
-        r = self._session.post(
-            "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
-            data=form_data,
-        )
-        parser = BeautifulSoup(r.text, "html.parser")
-        data = []
-        for cd in parser.findAll(text=True):
-            if isinstance(cd, CData):
-                data.append(cd)
-
-        if len(data) > 0:
-            parserdata = BeautifulSoup(data[0], "html.parser")
-            dtelink = parserdata.find("a", href=re.compile("dte-consulta"))
-            dte_link = dtelink["href"]
-            self._url_get_fel = dte_link
-            return True
-        return False
-
-    def get_invoices_headers(self, date_start, date_end, received=True):
+    def _get_invoices_headers(self, filter: SATFELFilters):
+        logging.info("CALL URL GET FEL")
         self._session.get(self._url_get_fel)
-        operation_param = "R" if received else "E"
+        operation_param = filter.tipo
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         dict_query = {
             "usuario": self._credentials.username,
-            "tipoOperacion": operation_param,
+            "tipoOperacion": operation_param.value,
             "nitIdReceptor": "",
-            "fechaEmisionIni": date_start.strftime("%d-%m-%Y"),
-            "fechaEmisionFinal": date_end.strftime("%d-%m-%Y"),
+            "estadoDte": filter.estadoDte.value,
+            "fechaEmisionIni": filter.fechaInicio.strftime("%d-%m-%Y"),
+            "fechaEmisionFinal": filter.fechaFin.strftime("%d-%m-%Y"),
         }
+        logging.info("Querying invoices")
+        logging.debug(dict_query)
         url = (
             "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte?"
             + urlencode(dict_query)
@@ -299,6 +281,7 @@ class SATDownloader:
         self.session = request_session
         self.url_get_fel = None
         self.its_initialized = False
+        self.view_state = None
 
     "Need to set credentials before use any of the methods"
 
@@ -314,20 +297,49 @@ class SATDownloader:
         did_login, view_state = SATDoLogin(self.credentials, self.session).execute()
         if not did_login or not view_state:
             raise ValueError("The credentials you provided are not valid")
+        logging.info("Did authenticate")
         menu = SATGetMenu(self.session, view_state)
         (did_get_menu, url) = menu.execute()
+        logging.info("Did get menu URL")
         self.url_get_fel = url
         if not did_get_menu:
             raise ValueError("Could not get the menu")
         self.its_initialized = True
+        self.view_state = view_state
+        logging.info("Initialization process finished")
 
-    def get_invoices(self, date_start, date_end, received=True):
+    """
+        Remember to logout after you have finished your operations to make sure you don't interfere with web login.
+    """
+
+    def logout(self):
+        SATDoLogout(self.session, self.view_state).execute()
+        self.its_initialized = False
+        self.view_state = None
+        self.url_get_fel = None
+
+    def get_stablisments(self):
+
+        if not self.its_initialized:
+            self.initialize()
+        stablisments = SATGetStablisments(self.session).execute()
+        return stablisments
+
+    def get_invoices_with_filters(self, filters: SATFELFilters):
+        logging.info("GET INVOICES WITH FILTERS")
         if not self.its_initialized:
             self.initialize()
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        return downloader.get_invoices_headers(date_start, date_end, received)
+        return downloader._get_invoices_headers(filters)
+
+    def get_invoices(self, date_start, date_end, received=True):
+        logging.info("GET INVOICES WITH OLD FORMAT")
+
+        type_fel = TypeFEL.RECIBIDA if received else TypeFEL.EMITIDA
+        filter = SATFELFilters(0, EstadoDTE.TODOS, date_start, date_end, type_fel)
+        return self.get_invoices_with_filters(filter)
 
     def get_invoices_models(self, date_start, date_end, received=True):
         if not self.its_initialized:
