@@ -20,12 +20,41 @@ class SATDoLogin:
         }
         r = self._session.post("https://farm3.sat.gob.gt/menu/init.do", data=login_dict)
         r.raise_for_status()
+        logging.info("Did make loging")
         bs = BeautifulSoup(r.text, features="html.parser")
         view_state = bs.find("input", {"name": "javax.faces.ViewState"})
         if view_state and "value" in view_state.attrs.keys():
             self._view_state = view_state["value"]
+            logging.info("Did get view state")
             return (True, self._view_state)
+        logging.warning("Didn't get view state")
         return (True, self._view_state)
+
+
+class SATDoLogout:
+    def __init__(self, request_session, view_state):
+        self._session = request_session
+        self.view_state = view_state
+
+    def execute(self):
+
+        form_data = {
+            "javax.faces.partial.ajax": True,
+            "javax.faces.source: formContent": "j_idt46",
+            "javax.faces.partial.execute": "@all",
+            "javax.faces.partial.render": "formContent:contentAgenciaVirtual",
+            "formContent:j_idt46": "formContent:j_idt46",
+            "formContent": "formContent",
+            "javax.faces.ViewState": self.view_state,
+        }
+        r = self._session.post(
+            "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
+            data=form_data,
+        )
+        r2 = self._session.post(
+            "https://farm3.sat.gob.gt/menu/init.do",
+            data={"operacion": "CANCELAR"},
+        )
 
 
 class SATGetMenu:
@@ -61,3 +90,15 @@ class SATGetMenu:
             self._url_get_fel = dte_link
             return (True, self._url_get_fel)
         return (False, self._url_get_fel)
+
+
+class SATGetStablisments:
+    def __init__(self, request_session):
+        self._session = request_session
+
+    def execute(self):
+        url = "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/catalogo/establecimientos"
+        cookie = self._session.cookies.get("ACCESS_TOKEN")
+        header = {"authtoken": "token " + cookie}
+        r = self._session.get(url, headers=header)
+        return r.json
