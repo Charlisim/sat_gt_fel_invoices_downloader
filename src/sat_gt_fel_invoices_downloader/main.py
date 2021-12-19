@@ -143,6 +143,7 @@ class SatFelDownloader:
             open(filename, "wb+").write(r.bytes)
         else:
             open(filename, "wb+").write(r.content)
+        return filename
 
     def _process_invoice_lines(self, xml_lines):
         lines = xml_lines
@@ -406,7 +407,7 @@ class SATDownloader:
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        downloader.get_pdf(invoice, save_in_dir)
+        return downloader.get_pdf(invoice, save_in_dir)
 
     def get_xml_content(self, invoice):
         if not self.its_initialized:
