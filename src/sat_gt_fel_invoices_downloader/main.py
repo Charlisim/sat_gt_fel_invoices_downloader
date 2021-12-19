@@ -279,7 +279,7 @@ class SatFelDownloader:
         ).content
 
     def get_xml(self, invoice, save_in_dir=None, received=True):
-        r = self._get_response(invoice=invoice, filetype="xml", received=received)
+        r, _ = self._get_response(invoice=invoice, filetype="xml", received=received)
         filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
         if not filename:
             filename = invoice["numeroUuid"] + ".xml"
