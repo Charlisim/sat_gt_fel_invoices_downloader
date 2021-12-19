@@ -1,5 +1,7 @@
 import re
 import os.path
+import base64
+import codecs
 import logging
 import requests
 from bs4 import BeautifulSoup, CData
@@ -74,8 +76,29 @@ class SatFelDownloader:
         json_response = r.json()["detalle"]["data"]
         return json_response
 
+    def _process_contingency_pdf(self, invoice, filetype, received):
+        url = "https://felav02.c.sat.gob.gt/verificador-rest/rest/publico/descargapdf"
+        invoice = {
+            "autorizacion": invoice["numeroUuid"],
+            "emisor": invoice["nitEmisor"],
+            "estado": "V",
+            "monto": invoice["granTotal"],
+            "receptor": invoice["nitReceptor"],
+        }
+
+        r = self._session.post(url, json=invoice)
+        if r.status_code == 200:
+            base64encoded = r.json()[0]
+            bytes = base64.b64decode(base64encoded)
+            if bytes[0:4] != b"%PDF":
+                raise ValueError("Missing the PDF file signature")
+            r.bytes = bytes
+        return r, True
+
     def _get_response(self, invoice, filetype, received=True):
         url = None
+        is_contingency = False
+        print(invoice)
         if filetype.lower() == "xml":
             url = (
                 "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/consulta-dte/xml?"
@@ -99,17 +122,27 @@ class SatFelDownloader:
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         header = {"authtoken": "token " + cookie}
         r = self._session.post(url, headers=header, json=[invoice])
-        return r
+        if r.status_code == 500:
+            logging.warn("Did get 500 error trying pdf contingency")
+            return self._process_contingency_pdf(invoice, "pdf-contingency", received)
+        return r, is_contingency
 
     def get_pdf_content(self, invoice, received=True):
         return self._get_response(invoice, filetype="pdf", received=received).content
 
     def get_pdf(self, invoice, save_in_dir=None, received=True):
-        r = self._get_response(invoice, filetype="pdf", received=received)
+        r, is_contingency = self._get_response(
+            invoice, filetype="pdf", received=received
+        )
         filename = self.get_filename_from_cd(r.headers.get("Content-Disposition"))
+        if not filename:
+            filename = invoice["numeroUuid"] + ".pdf"
         if save_in_dir:
             filename = os.path.join(save_in_dir, filename)
-        open(filename, "wb").write(r.content)
+        if is_contingency:
+            open(filename, "wb+").write(r.bytes)
+        else:
+            open(filename, "wb+").write(r.content)
 
     def _process_invoice_lines(self, xml_lines):
         lines = xml_lines
