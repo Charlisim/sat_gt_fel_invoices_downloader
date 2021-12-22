@@ -73,6 +73,7 @@ class SatFelDownloader:
         )
         header = {"authtoken": "token " + cookie}
         r = self._session.get(url, headers=header)
+        r.raise_for_status()
         json_response = r.json()["detalle"]["data"]
         return json_response
 
