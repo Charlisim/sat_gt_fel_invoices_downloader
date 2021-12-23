@@ -27,6 +27,8 @@ from contextlib import contextmanager
 Private class that makes all the action
 """
 
+TIMEOUT = 5
+
 
 class SatFelDownloader:
     def __init__(self, credentials, url_get_fel, request_session=requests.Session()):
@@ -41,7 +43,9 @@ class SatFelDownloader:
             "password": self._credentials.password,
             "operacion": "ACEPTAR",
         }
-        r = self._session.post("https://farm3.sat.gob.gt/menu/init.do", data=login_dict)
+        r = self._session.post(
+            "https://farm3.sat.gob.gt/menu/init.do", data=login_dict, timeout=TIMEOUT
+        )
         r.raise_for_status()
         bs = BeautifulSoup(r.text, features="html.parser")
         logging.info("Did login")
@@ -54,7 +58,7 @@ class SatFelDownloader:
 
     def _get_invoices_headers(self, filter: SATFELFilters):
         logging.info("CALL URL GET FEL")
-        self._session.get(self._url_get_fel)
+        self._session.get(self._url_get_fel, timeout=TIMEOUT)
         operation_param = filter.tipo
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         dict_query = {
@@ -72,7 +76,7 @@ class SatFelDownloader:
             + urlencode(dict_query)
         )
         header = {"authtoken": "token " + cookie}
-        r = self._session.get(url, headers=header)
+        r = self._session.get(url, headers=header, timeout=TIMEOUT)
         r.raise_for_status()
         json_response = r.json()["detalle"]["data"]
         return json_response
@@ -87,7 +91,7 @@ class SatFelDownloader:
             "receptor": invoice["nitReceptor"],
         }
 
-        r = self._session.post(url, json=invoice)
+        r = self._session.post(url, json=invoice, timeout=TIMEOUT)
         if r.status_code == 200:
             base64encoded = r.json()[0]
             bytes = base64.b64decode(base64encoded)
@@ -122,7 +126,7 @@ class SatFelDownloader:
         url += urlencode(dict_query)
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         header = {"authtoken": "token " + cookie}
-        r = self._session.post(url, headers=header, json=[invoice])
+        r = self._session.post(url, headers=header, json=[invoice], timeout=TIMEOUT)
         if r.status_code == 500:
             logging.warn("Did get 500 error trying pdf contingency")
             return self._process_contingency_pdf(invoice, "pdf-contingency", received)
