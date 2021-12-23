@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup, CData
 from urllib.parse import urlencode
 
+TIMEOUT = 5
+
 
 class SATDoLogin:
     def __init__(self, credentials, request_session):
@@ -18,7 +20,9 @@ class SATDoLogin:
             "password": self._credentials.password,
             "operacion": "ACEPTAR",
         }
-        r = self._session.post("https://farm3.sat.gob.gt/menu/init.do", data=login_dict)
+        r = self._session.post(
+            "https://farm3.sat.gob.gt/menu/init.do", data=login_dict, timeout=TIMEOUT
+        )
         r.raise_for_status()
         logging.info("Did make loging")
         bs = BeautifulSoup(r.text, features="html.parser")
@@ -50,10 +54,12 @@ class SATDoLogout:
         r = self._session.post(
             "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
             data=form_data,
+            timeout=3,
         )
         r2 = self._session.post(
             "https://farm3.sat.gob.gt/menu/init.do",
             data={"operacion": "CANCELAR"},
+            timeout=3,
         )
 
 
@@ -76,6 +82,7 @@ class SATGetMenu:
         r = self._session.post(
             "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
             data=form_data,
+            timeout=TIMEOUT,
         )
         parser = BeautifulSoup(r.text, "html.parser")
         data = []
@@ -100,5 +107,5 @@ class SATGetStablisments:
         url = "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/catalogo/establecimientos"
         cookie = self._session.cookies.get("ACCESS_TOKEN")
         header = {"authtoken": "token " + cookie}
-        r = self._session.get(url, headers=header)
+        r = self._session.get(url, headers=header, timeout=TIMEOUT)
         return r.json
