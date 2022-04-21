@@ -188,18 +188,32 @@ class SatFelDownloader:
         receptor = emission_data.select("Receptor")[0]
         lines = emission_data.select("Item")
         currency = general_data["CodigoMoneda"]
+        
         try:
+             
             issue_date = datetime.strptime(
                 general_data["FechaHoraEmision"], "%Y-%m-%dT%H:%M:%S%z"
             )
         except ValueError:
-            issue_date = datetime.strptime(
+            try:
+                issue_date = datetime.strptime(
                 general_data["FechaHoraEmision"], "%Y-%m-%dT%H:%M:%S.%f%z"
-            )
+                )
+            except:
+                try:
+                    issue_date = datetime.strptime(
+                    general_data["FechaHoraEmision"], "%Y-%m-%dT%H:%M:%S.%f"
+                    )
+                except:
+                    issue_date = datetime.strptime(
+                    general_data["FechaHoraEmision"], "%Y-%m-%dT%H:%M:%S"
+                    )
+            
         invoice_type = general_data["Tipo"]
         vat_affiliation = issuer["AfiliacionIVA"]
         stablisment_number = issuer["CodigoEstablecimiento"]
-        issuer_email = issuer["CorreoEmisor"]
+        
+        issuer_email = issuer["CorreoEmisor"] if "CorreoEmisor" in issuer else None
         issuernit = issuer["NITEmisor"]
         commercial_name = issuer["NombreComercial"]
         issuer_name = issuer["NombreEmisor"]
@@ -282,7 +296,7 @@ class SatFelDownloader:
     def get_xml_content(self, invoice, received=True):
         return self._get_response(
             invoice=invoice, filetype="xml", received=received
-        ).content
+        )[0].content
 
     def get_xml(self, invoice, save_in_dir=None, received=True):
         r, _ = self._get_response(invoice=invoice, filetype="xml", received=received)
