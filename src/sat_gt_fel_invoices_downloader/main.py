@@ -130,10 +130,17 @@ class SatFelDownloader:
         if r.status_code == 500:
             logging.warn("Did get 500 error trying pdf contingency")
             return self._process_contingency_pdf(invoice, "pdf-contingency", received)
+        print(r)
         return r, is_contingency
 
     def get_pdf_content(self, invoice, received=True):
-        return self._get_response(invoice, filetype="pdf", received=received)[0].content
+        r, is_contingency = self._get_response(
+            invoice, filetype="pdf", received=received
+        )
+        
+        if is_contingency:
+            return r.bytes
+        return r.content
 
     def get_pdf(self, invoice, save_in_dir=None, received=True):
         r, is_contingency = self._get_response(
@@ -418,7 +425,7 @@ class SATDownloader:
         downloader = SatFelDownloader(
             self.credentials, url_get_fel=self.url_get_fel, request_session=self.session
         )
-        downloader.get_pdf_content(invoice, save_in_dir)
+        return downloader.get_pdf_content(invoice, save_in_dir)
 
     def get_pdf(self, invoice, save_in_dir=None):
         if not self.its_initialized:
