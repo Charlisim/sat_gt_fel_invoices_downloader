@@ -133,7 +133,7 @@ class SatFelDownloader:
         return r, is_contingency
 
     def get_pdf_content(self, invoice, received=True):
-        return self._get_response(invoice, filetype="pdf", received=received).content
+        return self._get_response(invoice, filetype="pdf", received=received)[0].content
 
     def get_pdf(self, invoice, save_in_dir=None, received=True):
         r, is_contingency = self._get_response(
