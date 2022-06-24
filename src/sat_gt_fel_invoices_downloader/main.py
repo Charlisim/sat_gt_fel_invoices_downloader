@@ -27,7 +27,7 @@ from contextlib import contextmanager
 Private class that makes all the action
 """
 
-TIMEOUT = 5
+TIMEOUT = 20
 
 
 class SatFelDownloader:

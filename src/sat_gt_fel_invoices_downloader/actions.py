@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup, CData
 from urllib.parse import urlencode
 
-TIMEOUT = 5
+TIMEOUT = 20
 
 
 class SATDoLogin:
@@ -29,6 +29,7 @@ class SATDoLogin:
         view_state = bs.find("input", {"name": "javax.faces.ViewState"})
         if view_state and "value" in view_state.attrs.keys():
             self._view_state = view_state["value"]
+            logging.info(self._view_state)
             logging.info("Did get view state")
             return (True, self._view_state)
         logging.warning("Didn't get view state")
@@ -72,18 +73,20 @@ class SATGetMenu:
     def execute(self):
         form_data = {
             "javax.faces.partial.ajax": True,
-            "javax.faces.source: formContent": "j_idt34",
+            "javax.faces.source: formContent": "j_idt35",
             "javax.faces.partial.execute": "@all",
             "javax.faces.partial.render": "formContent:contentAgenciaVirtual",
-            "formContent:j_idt34": "formContent:j_idt34",
+            "formContent:j_idt35": "formContent:j_idt35",
             "formContent": "formContent",
             "javax.faces.ViewState": self._view_state,
         }
+        print(form_data)
         r = self._session.post(
             "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
             data=form_data,
             timeout=TIMEOUT,
         )
+        logging.getLogger().debug(r.text)
         parser = BeautifulSoup(r.text, "html.parser")
         data = []
         for cd in parser.findAll(text=True):
@@ -92,6 +95,7 @@ class SATGetMenu:
 
         if len(data) > 0:
             parserdata = BeautifulSoup(data[0], "html.parser")
+            logging.getLogger().info(parserdata)
             dtelink = parserdata.find("a", href=re.compile("dte-consulta"))
             dte_link = dtelink["href"]
             self._url_get_fel = dte_link
