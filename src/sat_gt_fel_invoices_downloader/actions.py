@@ -73,10 +73,10 @@ class SATGetMenu:
     def execute(self):
         form_data = {
             "javax.faces.partial.ajax": True,
-            "javax.faces.source: formContent": "j_idt35",
+            "javax.faces.source: formContent": "j_idt34",
             "javax.faces.partial.execute": "@all",
             "javax.faces.partial.render": "formContent:contentAgenciaVirtual",
-            "formContent:j_idt35": "formContent:j_idt35",
+            "formContent:j_idt34": "formContent:j_idt34",
             "formContent": "formContent",
             "javax.faces.ViewState": self._view_state,
         }
@@ -87,20 +87,13 @@ class SATGetMenu:
             timeout=TIMEOUT,
         )
         logging.getLogger().debug(r.text)
-        parser = BeautifulSoup(r.text, "html.parser")
-        data = []
-        for cd in parser.findAll(text=True):
-            if isinstance(cd, CData):
-                data.append(cd)
-
-        if len(data) > 0:
-            parserdata = BeautifulSoup(data[0], "html.parser")
-            logging.getLogger().info(parserdata)
-            dtelink = parserdata.find("a", href=re.compile("dte-consulta"))
-            dte_link = dtelink["href"]
-            self._url_get_fel = dte_link
-            return (True, self._url_get_fel)
-        return (False, self._url_get_fel)
+        parser = BeautifulSoup(r.text)
+        logging.getLogger().info(parser)
+        dtelink = parser.find("a",  href=re.compile("dte-consulta"))
+        logging.info(dtelink)
+        dte_link = dtelink["href"]
+        self._url_get_fel = dte_link
+        return (True, self._url_get_fel)
 
 
 class SATGetStablisments:
