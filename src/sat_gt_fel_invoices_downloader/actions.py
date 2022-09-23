@@ -73,10 +73,10 @@ class SATGetMenu:
     def execute(self):
         form_data = {
             "javax.faces.partial.ajax": True,
-            "javax.faces.source: formContent": "j_idt34",
+            "javax.faces.source: formContent": "j_idt36",
             "javax.faces.partial.execute": "@all",
             "javax.faces.partial.render": "formContent:contentAgenciaVirtual",
-            "formContent:j_idt34": "formContent:j_idt34",
+            "formContent:j_idt36": "formContent:j_idt36",
             "formContent": "formContent",
             "javax.faces.ViewState": self._view_state,
         }
