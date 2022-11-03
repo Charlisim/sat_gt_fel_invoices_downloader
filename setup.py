@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="sat_gt_fel_invoices_downloader",
-    version="0.5.11",
+    version="0.5.13",
     author="Carlos Simon",
     author_email="dev@csimon.dev",
     long_description=long_description,
