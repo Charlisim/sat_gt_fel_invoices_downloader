@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dte:GTDocumento xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0" Version="0.1">
+  <dte:SAT ClaseDocumento="dte">
+    <dte:DTE ID="DatosCertificados">
+      <dte:DatosEmision ID="DatosEmision">
+        <dte:DatosGenerales Tipo="FACT" FechaHoraEmision="2026-01-15T10:30:00-06:00" CodigoMoneda="GTQ"/>
+        <dte:Emisor NITEmisor="11111111" NombreEmisor="Example Issuer" NombreComercial="Example Shop" AfiliacionIVA="GEN" CodigoEstablecimiento="1" CorreoEmisor="issuer@example.test">
+          <dte:DireccionEmisor>
+            <dte:Direccion>Example Street 1</dte:Direccion><dte:CodigoPostal>01001</dte:CodigoPostal>
+            <dte:Municipio>Guatemala</dte:Municipio><dte:Departamento>Guatemala</dte:Departamento><dte:Pais>GT</dte:Pais>
+          </dte:DireccionEmisor>
+        </dte:Emisor>
+        <dte:Receptor IDReceptor="22222222" NombreReceptor="Example Receiver" CorreoReceptor="receiver@example.test">
+          <dte:DireccionReceptor><dte:Direccion>CIUDAD</dte:Direccion></dte:DireccionReceptor>
+        </dte:Receptor>
+        <dte:Items>
+          <dte:Item BienOServicio="B" NumeroLinea="1">
+            <dte:Cantidad>2</dte:Cantidad><dte:UnidadMedida>UNI</dte:UnidadMedida>
+            <dte:Descripcion>Example item</dte:Descripcion><dte:PrecioUnitario>56</dte:PrecioUnitario>
+            <dte:Precio>112</dte:Precio><dte:Descuento>0</dte:Descuento><dte:Total>112</dte:Total>
+          </dte:Item>
+        </dte:Items>
+        <dte:Totales>
+          <dte:TotalImpuestos><dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="12"/></dte:TotalImpuestos>
+          <dte:GranTotal>112</dte:GranTotal>
+        </dte:Totales>
+      </dte:DatosEmision>
+      <dte:Certificacion>
+        <dte:NumeroAutorizacion Serie="11111111" Numero="123456">11111111-1111-1111-1111-111111111111</dte:NumeroAutorizacion>
+      </dte:Certificacion>
+    </dte:DTE>
+  </dte:SAT>
+</dte:GTDocumento>

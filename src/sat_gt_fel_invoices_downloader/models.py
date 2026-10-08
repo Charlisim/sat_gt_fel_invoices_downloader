@@ -1,8 +1,6 @@
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import Enum
-from re import S
-from dataclasses import dataclass
-from typing import List
 
 
 class EstadoDTE(Enum):
@@ -19,7 +17,7 @@ class TypeFEL(Enum):
 @dataclass
 class SatCredentials:
     username: str
-    password: str
+    password: str = field(repr=False)
 
 
 @dataclass
@@ -34,7 +32,7 @@ class SATFELFilters:
 @dataclass
 class Address:
     street: str
-    zip_code: int
+    zip_code: str
     city: str
     state: str
     country: str = "GT"
@@ -48,8 +46,8 @@ class Address:
 class ContactModel:
     nit: str
     commercial_name: str
-    address: Address
-    email: str
+    address: Address | str
+    email: str | None
 
     @classmethod
     def builder(cls):
@@ -61,7 +59,7 @@ class IssuingModel(ContactModel):
     nit: str
     commercial_name: str
     issuing_name: str
-    address: str
+    address: Address | str
     vat_affiliation: str
     establishment: str
 
@@ -79,7 +77,7 @@ class Tax:
 
 
 @dataclass
-class InvoiceLine(object):
+class InvoiceLine:
     good_or_service: str
     description: str
     quantity: float
@@ -96,7 +94,7 @@ class InvoiceLine(object):
 
 @dataclass
 class InvoiceHeaders:
-    issue_date: datetime.date
+    issue_date: datetime
     invoice_type: str
     issuer: IssuingModel
     receiver: ContactModel
@@ -119,7 +117,7 @@ class TotalTax:
 
 @dataclass
 class InvoiceTotals:
-    total_taxes: List[TotalTax]
+    total_taxes: list[TotalTax]
     grand_total: float
 
     @classmethod
@@ -130,7 +128,7 @@ class InvoiceTotals:
 @dataclass
 class Invoice:
     headers: InvoiceHeaders
-    lines: List[InvoiceLine]
+    lines: list[InvoiceLine]
     totals: InvoiceTotals
     fel_signature: str
     fel_invoice_serie: str
@@ -142,14 +140,7 @@ class Invoice:
             lines_format += str(line)
             lines_format += "\n"
 
-        return "{3} - {4} - {5}\n{0}\n{1}\n{2}".format(
-            self.headers,
-            lines_format,
-            self.totals,
-            self.fel_signature,
-            self.fel_invoice_serie,
-            self.fel_invoice_number,
-        )
+        return f"{self.fel_signature} - {self.fel_invoice_serie} - {self.fel_invoice_number}\n{self.headers}\n{lines_format}\n{self.totals}"
 
     @classmethod
     def builder(cls):
