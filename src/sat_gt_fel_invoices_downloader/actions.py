@@ -1,11 +1,17 @@
-import re
-import datetime
 import logging
-import requests
-from bs4 import BeautifulSoup, CData
-from urllib.parse import urlencode
+import re
+
+from bs4 import BeautifulSoup
 
 TIMEOUT = 20
+logger = logging.getLogger(__name__)
+
+
+def auth_headers(session):
+    token = session.cookies.get("ACCESS_TOKEN")
+    if not token:
+        raise ValueError("SAT did not provide an ACCESS_TOKEN; authenticate again")
+    return {"authtoken": "token " + token}
 
 
 class SATDoLogin:
@@ -24,16 +30,15 @@ class SATDoLogin:
             "https://farm3.sat.gob.gt/menu/init.do", data=login_dict, timeout=TIMEOUT
         )
         r.raise_for_status()
-        logging.info("Did make loging")
+        logger.info("Login response received")
         bs = BeautifulSoup(r.text, features="html.parser")
         view_state = bs.find("input", {"name": "javax.faces.ViewState"})
         if view_state and "value" in view_state.attrs.keys():
             self._view_state = view_state["value"]
-            logging.info(self._view_state)
-            logging.info("Did get view state")
+            logger.info("Login view state received")
             return (True, self._view_state)
-        logging.warning("Didn't get view state")
-        return (True, self._view_state)
+        logger.warning("Login response did not contain a view state")
+        return (False, None)
 
 
 class SATDoLogout:
@@ -52,16 +57,20 @@ class SATDoLogout:
             "formContent": "formContent",
             "javax.faces.ViewState": self.view_state,
         }
-        r = self._session.post(
-            "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
-            data=form_data,
-            timeout=3,
-        )
-        r2 = self._session.post(
-            "https://farm3.sat.gob.gt/menu/init.do",
-            data={"operacion": "CANCELAR"},
-            timeout=3,
-        )
+        try:
+            r = self._session.post(
+                "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
+                data=form_data,
+                timeout=TIMEOUT,
+            )
+            r.raise_for_status()
+        finally:
+            r = self._session.post(
+                "https://farm3.sat.gob.gt/menu/init.do",
+                data={"operacion": "CANCELAR"},
+                timeout=TIMEOUT,
+            )
+            r.raise_for_status()
 
 
 class SATGetMenu:
@@ -80,17 +89,23 @@ class SATGetMenu:
             "formContent": "formContent",
             "javax.faces.ViewState": self._view_state,
         }
-        print(form_data)
         r = self._session.post(
             "https://farm3.sat.gob.gt/menu-agenciaVirtual/private/home.jsf",
             data=form_data,
             timeout=TIMEOUT,
         )
-        logging.getLogger().debug(r.text)
-        parser = BeautifulSoup(r.text)
-        logging.getLogger().info(parser)
+        r.raise_for_status()
+        if r.text.lstrip().startswith("<?xml") or "<partial-response" in r.text:
+            partial_response = BeautifulSoup(r.text, "xml")
+            html = "\n".join(
+                update.get_text() for update in partial_response.find_all("update")
+            )
+        else:
+            html = r.text
+        parser = BeautifulSoup(html, "html.parser")
         dtelink = parser.find("a", href=re.compile("dte-consulta"))
-        logging.info(dtelink)
+        if dtelink is None:
+            return (False, None)
         dte_link = dtelink["href"]
         self._url_get_fel = dte_link
         return (True, self._url_get_fel)
@@ -102,7 +117,6 @@ class SATGetStablisments:
 
     def execute(self):
         url = "https://felcons.c.sat.gob.gt/dte-agencia-virtual/api/catalogo/establecimientos"
-        cookie = self._session.cookies.get("ACCESS_TOKEN")
-        header = {"authtoken": "token " + cookie}
-        r = self._session.get(url, headers=header, timeout=TIMEOUT)
-        return r.json
+        r = self._session.get(url, headers=auth_headers(self._session), timeout=TIMEOUT)
+        r.raise_for_status()
+        return r.json()
